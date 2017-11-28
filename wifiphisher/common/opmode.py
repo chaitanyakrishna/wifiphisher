@@ -154,8 +154,7 @@ class OpMode(object):
                 constants.R +
                 '!' +
                 constants.W +
-                '] --wpspbc-exploit (-wE) and --wpspbc-assoc-interface (-wAI)'
-                'are used in conjuction.')
+                '] --wpspbc-assoc-interface (-wAI) requires --wpspbc-exploit (-wE) option.')
 
 
     def set_opmode(self, args, network_manager):
@@ -294,7 +293,8 @@ class OpMode(object):
         """
 
         return self.op_mode in [constants.OP_MODE1,
-                                constants.OP_MODE2]
+                                constants.OP_MODE2,
+                                constants.OP_MODE7]
 
     def wps_assoc_enabled(self):
         """

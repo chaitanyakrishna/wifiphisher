@@ -14,7 +14,7 @@ import wifiphisher.common.constants as constants
 
 
 logger = logging.getLogger(__name__)
-IS_DEAUTH_CONT = True
+is_deauth_cont = True
 
 
 def register_backend_funcs(func):
@@ -56,8 +56,7 @@ class ExtensionManager(object):
     * send_output(self): Method that returns in a list
       of strings the entry logs that we need to output.
 
-    * on_exit(self): Method that frees the resources using by
-      the specific extension module
+    * on_exit(self): Method that frees all the used resources
 
     * each extension can define the backend method as follows:
       ex:
@@ -273,7 +272,7 @@ class ExtensionManager(object):
             self._socket.close()
         except AttributeError:
             pass
-        # clean the wps resource when exist
+        # Clean resources used by extension modules
         for extension in self._extensions:
             extension.on_exit()
 
@@ -401,8 +400,7 @@ class ExtensionManager(object):
             for pkt in self._packets_to_send[self._current_channel] + \
                     self._packets_to_send["*"]:
                 try:
-                    #if not self._is_deauth_frame() or IS_DEAUTH_CONT:
-                    if IS_DEAUTH_CONT or not self._is_deauth_frame(pkt):
+                    if is_deauth_cont or not self._is_deauth_frame(pkt):
                         logger.debug("Send pkt with A1:%s A2:%s subtype:%s in channel:%s",
                                      pkt.addr1, pkt.addr2, pkt.subtype,
                                      self._current_channel)

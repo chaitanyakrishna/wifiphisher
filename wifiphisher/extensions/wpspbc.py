@@ -1,5 +1,5 @@
 """
-Extension that sniff if there is change for WPS pbc exploitation
+Extension that sniffs if there is change for WPS PBC exploitation
 
 Define three WPS states
 
@@ -78,7 +78,7 @@ class Wpspbc(object):
         """
         if self.get_wps_state() != WPS_CONNECTED:
             self.set_wps_state(WPS_IDLE)
-            extensions.IS_DEAUTH_CONT = True
+            extensions.is_deauth_cont = True
             if self._is_supplicant_running:
                 kill_wpa_supplicant()
                 self._is_supplicant_running = False
@@ -206,14 +206,14 @@ class Wpspbc(object):
             has_pbc = self.does_have_wpspbc_ie(packet)
             if self.get_wps_state() == WPS_IDLE:
                 if has_pbc:
-                    extensions.IS_DEAUTH_CONT = False
+                    extensions.is_deauth_cont = False
                     self.set_wps_state(WPS_CONNECTING)
             elif self.get_wps_state() == WPS_CONNECTING:
                 # if we didn't connect to the WPS in the 2MIN walk time
                 if not has_pbc and not self._wps_timer.is_alive():
                     self.set_wps_state(WPS_IDLE)
                     # start deauthing again
-                    extensions.IS_DEAUTH_CONT = True
+                    extensions.is_deauth_cont = True
                 # if users specify the wps association interface we start
                 # the automatic association here
                 else:
@@ -224,7 +224,7 @@ class Wpspbc(object):
             # if state is not CONNECTED and timer is not running
             if not is_assoc and not self._wps_timer.is_alive():
                 self.set_wps_state(WPS_IDLE)
-                extensions.IS_DEAUTH_CONT = True
+                extensions.is_deauth_cont = True
                 self._is_supplicant_running = False
                 kill_wpa_supplicant()
             elif self.get_wps_state() == WPS_CONNECTING:
@@ -263,12 +263,11 @@ class Wpspbc(object):
         :return: A list with all the message entries
         :rtype: list
         """
-        if self.get_wps_state() == WPS_IDLE:
-            return ["WPS PBC button is not yet pressed for the target AP!"]
+        if self.get_wps_state() == WPS_CONNECTED:
+            return ["WPS PBC CONNECTED!"]
         elif self.get_wps_state() == WPS_CONNECTING:
             return ["WPS PBC button is being pressed for the target AP!"]
-        # for the WPS_CONNECTED case
-        return ["WPS PBC CONNECTED!"]
+        return [""]
 
     def send_channels(self):
         """
